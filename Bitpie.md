@@ -13,7 +13,7 @@ Also in file /com.biepie/shared_prefs/com.bitpie_preferences.xml, \<string name=
 
 The ios version of bitpie have the some problem. There is a plist file in app data folder. And it contains 
 \<key\>seedKey\</key\>
-	<string>889183F3C372B41CAE4025A101FA0022D774719FEF54F4E91D8C1EA3836710C41A1B434F1814A72C6A4AC2C16E567BA01FA91E33F7A73C01709B5DB453AF10E7</string>
+	\<string\>889183F3C372B41CAE4025A101FA0022D774719FEF54F4E91D8C1EA3836710C41A1B434F1814A72C6A4AC2C16E567BA01FA91E33F7A73C01709B5DB453AF10E7\</string\>
 Which is the seedKey in plaintext.
 
 
