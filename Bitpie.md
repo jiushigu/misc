@@ -1,6 +1,6 @@
 Bitpie is an integrated blockchain asset service product. Its main functions include: sending and receiving, buying and selling, speeding up transactions, exchanges and so on. Currently the most popular mobile digital currency wallet in china which support multi-crypto currencies .
 
-After a brief analysis of the bitpie app (android and ios), we discovered that bitpie actually stored all of the user's digital currency initial keys in plain text.
+After a brief analysis of the bitpie app (android and ios up to version 3.2.4), we discovered that bitpie actually stored all of the user's digital currency initial keys in plain text.
 
 When bitpie frist startup, it will randomly generate an initial entropy of 128 bits, and then it will expand the 128-bits entropy into 132-bits and generate 12 words to help user to remember the random bits.
 
